@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="61c7f4ca-7779-4e2c-925b-4531320537c1" name="trcizdravo_novo" url="http://ftp.najjeftinijaputovanja.com">
+        <fileTransfer host="ftp.najjeftinijaputovanja.com" port="21">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" />
+          </advancedOptions>
+          <option name="port" value="21" />
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>

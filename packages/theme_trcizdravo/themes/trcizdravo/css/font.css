@@ -1,0 +1,13 @@
+@font-face{font-family:"Oswald"; font-style:normal; font-weight:400; src:local("Oswald Regular"),local("Oswald-Regular"),url("../fonts/Oswald-Regular-400.woff") format("woff")}
+@font-face{font-family:"Varela"; font-style:normal; font-weight:400; src:local("Varela"),url("../fonts/Varela-400.woff") format("woff")}
+@font-face{font-family:"Open Sans"; font-style:normal; font-weight:400; src:local("Open Sans"),local("OpenSans"),url("../fonts/OpenSans-400.woff") format("woff")}
+
+/* cabin-sketch-700 - latin */
+@font-face {
+  font-family: 'Cabin Sketch';
+  font-style: normal;
+  font-weight: 700;
+  src: local('Cabin Sketch'), local('CabinSketch'),
+  url('../fonts/cabin-sketch-v10-latin-700.woff2') format('woff2')
+}
+

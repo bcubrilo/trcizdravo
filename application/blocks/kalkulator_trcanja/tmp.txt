@@ -1,0 +1,103 @@
+        $('#izracunaj').click(function(){
+            $('#kalkulator-trcanja .poruka').text('');
+            var control = 0;
+            var d = parseFloat($('#duzina').val());
+            var t_h = $('#vrijeme_h').val() ? parseInt($('#vrijeme_h').val()) : 0;
+            var t_m = $('#vrijeme_m').val() ? parseInt($('#vrijeme_m').val()) : 0;
+            var t_s = $('#vrijeme_s').val() ? parseInt($('#vrijeme_s').val()) : 0;
+            var T_m = parseInt($('#tempo_m').val());
+            var T_s = parseInt($('#tempo_s').val());
+
+            var t = (t_h ? t_h*3600 : 0) + (t_m  ? t_m * 60 : 0) + (t_s ? t_s : 0);
+            var T = (T_m  ? T_m * 60 : 0) + (T_s ? T_s : 0);
+
+            if(d > 0){
+                control++;
+            }
+            if(t > 0){
+                control++;
+            }
+            if(T > 0){
+                control++;
+            }
+            if(control != 2){
+                $('#kalkulator-trcanja .poruka').text('Niste ispravno popunili polja!')
+                return;
+            }
+
+            if(!T){
+                T = t/d;
+                $('#tempo_m').val(Math.floor(T/60));
+                var tmpSeconds = (T%60).toFixed(2);
+                if(tmpSeconds==Math.floor(tmpSeconds)){tmpSeconds = Math.floor(tnpSeconds)}
+                $('#tempo_s').val(tmpSeconds);
+            }
+            if(!t){
+                t = d * T;
+                $('#vrijeme_h').val(Math.floor(t/3600));
+                $('#vrijeme_m').val(Math.floor((t%3600)/60));
+                $('#vrijeme_s').val((t%3600)%60)
+            }
+            if(!d){
+                d = t / T;
+                $('#duzina').val(d.toFixed(2));
+            }
+            var t_min = t_h*60 + t_m + t_s/60;
+            var d_m = d * 1000;
+            var c = -4.6 + .182258 * d_m / t_min + .000104 * d_m * d_m / t_min / t_min;
+            var i = .8 + .1894393 * Math.exp(-.012778 * t_min) + .2989558 * Math.exp(-.1932605 * t_min);
+            var vdot = Math.round(1000 * c / i) / 1000;
+
+            $('#predvidjeni-rezultati').css('display','table');
+            var trke = {42195:'Maraton',21095:'Polumaraton',10000:'10 km',5000:'5 km',3000:'3 km',1500:'1500 m'};
+            $('#predvidjeni-rezultati .red:not(.zaglavlje)').remove();
+            for(var duzina in trke){
+                var rezultat = predvidiRezultat(vdot,duzina);
+                $('#predvidjeni-rezultati').append(
+                    $('<div class="red">')
+                        .append('<div class="kolona">'+trke[duzina]+':</div>'+'<div class="kolona">'+rezultat+'</div>')
+            );
+            }
+
+
+        });
+
+
+        var predvidiRezultat = function(vdot, distanca){
+            var c, i, e, dc,di, dt,n,t;
+            t = distanca * .004;
+            n=0;
+            do
+            {
+                c=-4.6+.182258*distanca/t + .000104*distanca*distanca/t/t;
+                i=.8+.1894393*Math.exp(-.012778*t)+ .2989558*Math.exp(-.1932605*t);
+                e=Math.abs(c-i*vdot);
+                dc=-.182258*distanca/t/t-2*.000104*distanca*distanca/t/t/t;
+                di=-.012778*.1894393*Math.exp(-.012778*t)-.1932605*.2989558*Math.exp(-.1932605*t);
+                dt=(c-i*vdot)/(dc-di*vdot);
+                t-=dt;
+                n++;
+            }
+            while(n<10 && e>.1);
+            t = t.toFixed(2);
+            h = Math.floor(t / 60);
+            m =Math.floor(t % 60);
+            s = Math.round(60 * (t - Math.floor(t)));
+
+            return (h > 0 ? h+':' : '')+ (m<10 ? '0'+m : m)  + ':' + (s<10 ? '0'+s : s);
+        }
+
+        $('#duzina').keypress(function validate(evt) {
+                var theEvent = evt || window.event;
+                var key = theEvent.keyCode || theEvent.which;
+                key = String.fromCharCode( key );
+                var regex = /[0-9]|\./;
+                if( !regex.test(key) ) {
+                    theEvent.returnValue = false;
+                    if(theEvent.preventDefault) theEvent.preventDefault();
+                }
+            }
+        );
+        $('.ocisti').click(function(){
+            $(this).closest('.form-group').find('input').val('');
+        });
